@@ -89,7 +89,10 @@ ENV/
 .ropeproject
 
 # Train Data
-/slim
+/slim/data
 
 # Packages
 *.tar.gz
+
+# Store
+*.DS_Store
