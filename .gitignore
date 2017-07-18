@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Train Data
+/slim
+
+# Packages
+*.tar.gz

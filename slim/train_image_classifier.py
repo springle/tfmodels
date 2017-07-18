@@ -376,7 +376,7 @@ def _get_variables_to_train():
   return variables_to_train
 
 
-def main(_):
+def train():
   if not FLAGS.dataset_dir:
     raise ValueError('You must supply the dataset directory with --dataset_dir')
 
@@ -568,6 +568,18 @@ def main(_):
         save_interval_secs=FLAGS.save_interval_secs,
         sync_optimizer=optimizer if FLAGS.sync_replicas else None)
 
+def main(server, volume):
+  FLAGS.master = server.target
+  FLAGS.task = server.server_def.task_index
+  FLAGS.is_chief = (server.server_def.task_index == 0)
+  FLAGS.train_dir = volume
+  FLAGS.dataset_dir = 'slim/data/flowers'
+  FLAGS.dataset_name='flowers'
+  FLAGS.worker_replicas = 3
+  FLAGS.num_ps_tasks = 2
+  FLAGS.clone_on_cpu = True
+  train()
 
 if __name__ == '__main__':
-  tf.app.run()
+  main(server=tf.train.Server.create_local_server(), \
+       volume='tmp/train_data')
